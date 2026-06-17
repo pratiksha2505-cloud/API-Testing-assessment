@@ -1,0 +1,278 @@
+{
+  "info": {
+    "_postman_id": "55ea9338-d3e8-4a8f-8491-e58e80603c02",
+    "name": "User Account Management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55599191",
+    "_collection_link": "https://go.postman.co/collection/55599191-55ea9338-d3e8-4a8f-8491-e58e80603c02?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Positive Tests",
+      "item": [
+        {
+          "name": "Retrive Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {pm.response.to.have.status(200);});\r",
+                  "pm.test(\"Response time is less than 200ms\", function () {pm.expect(pm.response.responseTime).to.be.below(200);});\r",
+                  "pm.test(\"Response is JSON\",function(){pm.response.to.be.json;});\r",
+                  "const response=pm.response.json();\r",
+                  "pm.test(\"Response is a JSON object\",function()\r",
+                  "{\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "pm.test(\"Username feild is present\",function()\r",
+                  "{\r",
+                  "    pm.expect(response).to.have.property(\"username\");\r",
+                  "});\r",
+                  "pm.test(\"Email feild is present\",function()\r",
+                  "{\r",
+                  "    pm.expect(response).to.have.property(\"email\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User Creation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Verify status code is 201 or 200\r",
+                  "pm.test(\"Status code is 201 or 200\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+                  "});\r",
+                  "\r",
+                  "// Parse response\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "// Verify id is generated\r",
+                  "pm.test(\"Response contains generated id\", function () {\r",
+                  "    pm.expect(response).to.have.property(\"id\");\r",
+                  "    pm.expect(response.id).to.not.be.null;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n     \"username\": \"testuser\",\r\n  \"email\": \"testuser@example.com\",\r\n  \"password\": \"Test@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Account Update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test\r",
+                  "(\"Status code is 200 OK\",function()\r",
+                  "{\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "//verify json response\r",
+                  "pm.test(\r",
+                  "    \"REsponse is JSON\",function()\r",
+                  "    {\r",
+                  "        pm.response.to.be.json;\r",
+                  "    }\r",
+                  ");\r",
+                  "//Parse response\r",
+                  "var jsonData=pm.response.json;\r",
+                  "//Check if first name is updated\r",
+                  "pm.test(\"firstname is updated\" , function()\r",
+                  "{\r",
+                  "    pm.expect(jsonData.firstName).to.eql(\"Pratiksha\");\r",
+                  "});\r",
+                  "//Check if last name is updated\r",
+                  "pm.test(\"Last Name is updated\" , function()\r",
+                  "{\r",
+                  "    pm.expect(jsonData.lastName).to.eql(\"Shah\");\r",
+                  "});\r",
+                  "pm.test(\"Phone number is updated\",function()\r",
+                  "{\r",
+                  "    pm.expect(jsonData.phone).to.eql(\"+919980154578\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\":\"Pratiksha\",\r\n  \"lastName\":\"Shah\",\r\n  \"phone\":\"+919980154578\"\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resource Removal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Verify status code\r",
+                  "pm.test(\"Status code is successful\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);\r",
+                  "});\r",
+                  "\r",
+                  "// Verify response time\r",
+                  "pm.test(\"Response time is less than 2000ms\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Follow-up GET Request",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative Tests",
+      "item": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    }
+  ]
+}
